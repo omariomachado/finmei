@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
 
 export default function Page() {
   const [email, setEmail] = useState("");
@@ -14,211 +13,179 @@ export default function Page() {
   };
 
   return (
-    <main className="min-h-screen bg-white text-gray-800 font-sans scroll-smooth">
+    <main className="min-h-screen bg-white text-gray-900 font-sans">
       {/* HEADER */}
-      <header className="flex justify-between items-center px-6 py-5 max-w-6xl mx-auto">
-        <motion.h1
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-2xl font-bold text-emerald-700"
-        >
-          FinMEI
-        </motion.h1>
-        <motion.a
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          href="#cadastro"
-          className="px-5 py-2 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition font-semibold shadow-sm"
-        >
-          Entrar na lista
-        </motion.a>
+      <header className="container flex items-center justify-between py-5">
+        <div className="flex items-center gap-3">
+          <div className="bg-emerald-600 text-white rounded-md px-3 py-1 font-semibold">FinMEI</div>
+          <span className="text-sm text-gray-600">Simples. Claro. Pra você.</span>
+        </div>
+
+        <nav>
+          <a
+            href="#cadastro"
+            className="inline-block px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm hover:bg-emerald-700 transition"
+          >
+            Entrar na lista
+          </a>
+        </nav>
       </header>
 
       {/* HERO */}
-      <section className="bg-gradient-hero text-center py-24 px-6 relative overflow-hidden">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="max-w-3xl mx-auto relative z-10"
-        >
-          <h2 className="text-5xl sm:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">
-            Controle total das finanças do seu MEI <br />
-            <span className="text-emerald-600">em poucos minutos ⏱️</span>
-          </h2>
-          <p className="text-lg text-gray-600 mb-10">
-            Veja lucros, despesas e o valor do DAS em segundos — tudo automático, visual e feito
-            para quem quer entender o próprio dinheiro sem ser especialista.
+      <section className="bg-gradient-to-b from-emerald-50 to-white py-20">
+        <div className="container max-w-3xl mx-auto text-center px-6">
+          <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight mb-4">
+            Organize seu dinheiro. Sem planilha, sem dor de cabeça.
+          </h1>
+          <p className="text-lg text-gray-700 mb-8">
+            Você faz o trabalho — o FinMEI ajuda a cuidar do resto. Veja quanto entrou, quanto saiu e o que
+            você precisa pagar (como o DAS), tudo de forma simples e visual.
           </p>
 
           {!submitted ? (
             <form
-              onSubmit={handleSubmit}
               id="cadastro"
-              className="flex flex-col sm:flex-row justify-center gap-3 max-w-md mx-auto"
+              onSubmit={handleSubmit}
+              className="mx-auto max-w-md flex flex-col sm:flex-row gap-3"
+              aria-label="Formulário de cadastro FinMEI"
             >
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Digite seu e-mail e entre na lista"
-                className="flex-1 border border-gray-300 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400"
+                placeholder="Digite seu melhor e-mail"
+                className="flex-1 border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-300"
+                aria-label="Email"
               />
               <button
                 type="submit"
-                className="btn-primary"
+                className="bg-emerald-600 text-white px-5 py-3 rounded-lg font-semibold hover:bg-emerald-700 transition"
               >
-                Quero testar grátis 🚀
+                Quero acesso grátis
               </button>
             </form>
           ) : (
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-emerald-700 font-medium text-lg mt-4"
-            >
-              ✅ Obrigado! Você está na lista de espera 🎉
-            </motion.p>
+            <p className="text-emerald-700 font-medium mt-4">✅ Pronto — você entrou na lista! Em breve avisamos.</p>
           )}
-        </motion.div>
-      </section>
 
-      {/* PROVA SOCIAL */}
-      <section className="bg-white py-16 border-y border-gray-100">
-        <motion.h3
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center text-xl font-semibold text-gray-700 mb-6"
-        >
-          Mais de <span className="text-emerald-600 font-bold">120 microempreendedores</span> já estão na lista de espera.
-        </motion.h3>
-        <div className="flex justify-center gap-4 opacity-70">
-          <div className="bg-gray-100 h-10 w-24 rounded-lg shadow-soft"></div>
-          <div className="bg-gray-100 h-10 w-24 rounded-lg shadow-soft"></div>
-          <div className="bg-gray-100 h-10 w-24 rounded-lg shadow-soft"></div>
+          <p className="text-sm text-gray-500 mt-6">
+            As 100 primeiras pessoas terão acesso beta gratuito — sem compromisso.
+          </p>
         </div>
       </section>
 
-      {/* BENEFÍCIOS */}
-      <section className="py-20 px-6 bg-gradient-to-b from-white to-emerald-50">
-        <div className="max-w-5xl mx-auto text-center">
-          <motion.h3
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-3xl font-bold mb-10"
-          >
-            Tenha o controle total das suas finanças — sem planilhas e sem dor de cabeça
-          </motion.h3>
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {[
-              "Registre receitas e despesas em segundos.",
-              "Receba alertas antes do vencimento do DAS.",
-              "Veja seu saldo e fluxo de caixa automaticamente.",
-              "Gere relatórios prontos para o contador.",
-              "Acesse de qualquer lugar, no celular ou computador.",
-              "Tenha clareza sobre o lucro real do seu negócio.",
-            ].map((benefit, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.1 }}
-                className="p-6 bg-white border border-gray-100 rounded-2xl shadow-soft hover:shadow-md transition"
-              >
-                <p className="text-gray-700">{benefit}</p>
-              </motion.div>
-            ))}
+      {/* PROBLEMA RÁPIDO */}
+      <section className="py-12">
+        <div className="container max-w-4xl mx-auto px-6 text-center">
+          <h2 className="text-2xl font-bold mb-3">Isso soa familiar?</h2>
+          <p className="text-gray-700 mb-6">
+            Você anota no caderno, no WhatsApp ou numa planilha que sempre quebra. No fim do mês não sabe se sobrou
+            ou se tem conta atrasada. E o DAS? Você fica com medo de esquecer.
+          </p>
+
+          <div className="grid sm:grid-cols-3 gap-6">
+            <div className="p-5 bg-white border rounded-lg shadow-sm">
+              <p className="font-semibold mb-2">⏰ Esquece prazos</p>
+              <p className="text-sm text-gray-600">Sem lembrete, os pagamentos passam batido.</p>
+            </div>
+            <div className="p-5 bg-white border rounded-lg shadow-sm">
+              <p className="font-semibold mb-2">📉 Sem visão clara</p>
+              <p className="text-sm text-gray-600">Você não sabe se o mês foi bom até olhar as contas.</p>
+            </div>
+            <div className="p-5 bg-white border rounded-lg shadow-sm">
+              <p className="font-semibold mb-2">🧾 Planilhas confusas</p>
+              <p className="text-sm text-gray-600">Ferramentas complexas que não falam a sua língua.</p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* TESTEMUNHOS */}
-      <section className="bg-white py-20 px-6 text-center border-y border-gray-100">
-        <h3 className="text-3xl font-bold mb-10">O que outros MEIs dizem</h3>
-        <div className="grid sm:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          {[
-            {
-              name: "João Silva",
-              text: "“Antes eu me perdia nas planilhas. Agora sei exatamente quanto lucro tenho por mês.”",
-            },
-            {
-              name: "Ana Souza",
-              text: "“O FinMEI me avisa antes de vencer o DAS. Isso salvou meu negócio de multas!”",
-            },
-            {
-              name: "Carlos Mendes",
-              text: "“Rápido, simples e visual. Tudo o que eu precisava pra entender meu dinheiro.”",
-            },
-          ].map((item, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.1 }}
-              className="bg-emerald-50 p-6 rounded-2xl shadow-soft"
-            >
-              <p className="italic text-gray-700 mb-4">{item.text}</p>
-              <p className="font-semibold text-emerald-700">— {item.name}</p>
-            </motion.div>
-          ))}
+      {/* SOLUÇÃO */}
+      <section className="py-16 bg-emerald-50">
+        <div className="container max-w-5xl mx-auto px-6">
+          <h3 className="text-2xl font-bold mb-6 text-center">Como o FinMEI ajuda você</h3>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="p-6 bg-white rounded-lg border shadow-sm">
+              <p className="font-semibold mb-2">Registrar em segundos</p>
+              <p className="text-sm text-gray-700">Anote entradas e saídas rapidamente, direto do celular.</p>
+            </div>
+
+            <div className="p-6 bg-white rounded-lg border shadow-sm">
+              <p className="font-semibold mb-2">Lembretes automáticos</p>
+              <p className="text-sm text-gray-700">Receba aviso antes do vencimento do DAS e outras taxas.</p>
+            </div>
+
+            <div className="p-6 bg-white rounded-lg border shadow-sm">
+              <p className="font-semibold mb-2">Relatórios prontos</p>
+              <p className="text-sm text-gray-700">Mostre ao seu contador ou confira seu lucro do mês num PDF simples.</p>
+            </div>
+          </div>
+
+          <div className="text-center mt-8">
+            <a href="#cadastro" className="inline-block bg-emerald-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-emerald-700 transition">
+              Quero começar — é grátis
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* PROVAS (SIMULADAS) */}
+      <section className="py-16">
+        <div className="container max-w-4xl mx-auto px-6 text-center">
+          <h4 className="text-lg font-semibold mb-4">Quem já entrou na lista</h4>
+          <p className="text-sm text-gray-600 mb-6">Mais de 120 profissionais como você — cabeleireiros, pedreiros, vendedores e entregadores.</p>
+
+          <div className="grid sm:grid-cols-3 gap-6">
+            <div className="p-5 bg-emerald-50 rounded-lg">
+              <p className="italic">“Agora eu sei quando posso tirar dinheiro pra mim.”</p>
+              <p className="font-semibold mt-3">— Maria, cabeleireira</p>
+            </div>
+            <div className="p-5 bg-emerald-50 rounded-lg">
+              <p className="italic">“O lembrete do DAS me salvou de uma multa.”</p>
+              <p className="font-semibold mt-3">— Antônio, motorista</p>
+            </div>
+            <div className="p-5 bg-emerald-50 rounded-lg">
+              <p className="italic">“Uso no celular e resolve tudo rapidinho.”</p>
+              <p className="font-semibold mt-3">— Carla, vendedora online</p>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* CTA FINAL */}
-      <section className="py-20 px-6 text-center bg-gradient-to-b from-emerald-50 to-white">
-        <motion.h3
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-3xl font-bold mb-6"
-        >
-          As 100 primeiras pessoas terão acesso gratuito à versão beta 🎁
-        </motion.h3>
-        <p className="text-gray-600 mb-8 max-w-xl mx-auto">
-          Garanta seu lugar agora e seja um dos primeiros a testar o FinMEI antes do lançamento oficial.
-        </p>
+      <section className="py-16 bg-gradient-to-b from-white to-emerald-50">
+        <div className="container max-w-3xl mx-auto px-6 text-center">
+          <h3 className="text-2xl font-bold mb-4">Quer mais segurança com suas finanças?</h3>
+          <p className="text-gray-700 mb-6">Entre na lista de espera e seja avisado quando a versão beta estiver disponível.</p>
 
-        {!submitted ? (
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col sm:flex-row justify-center gap-3 max-w-md mx-auto"
-          >
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Seu melhor e-mail"
-              className="flex-1 border border-gray-300 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400"
-            />
-            <button
-              type="submit"
-              className="btn-primary"
-            >
-              Quero garantir meu acesso
-            </button>
-          </form>
-        ) : (
-          <p className="text-emerald-700 font-medium text-lg mt-4">
-            ✅ Você já está na lista! Em breve enviaremos novidades 🎉
-          </p>
-        )}
+          {!submitted ? (
+            <form onSubmit={handleSubmit} className="mx-auto max-w-md flex gap-3">
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Seu melhor e-mail"
+                className="flex-1 border border-gray-300 px-4 py-3 rounded-lg"
+              />
+              <button type="submit" className="bg-emerald-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-emerald-700 transition">
+                Me avise
+              </button>
+            </form>
+          ) : (
+            <p className="text-emerald-700 font-medium mt-4">✅ Você está na lista — obrigado!</p>
+          )}
+        </div>
       </section>
 
       {/* FOOTER */}
-      <footer className="bg-emerald-700 text-white py-8 text-center">
-        <p className="font-medium">© 2025 FinMEI — Simplificando a vida do Microempreendedor.</p>
-        <p className="text-sm mt-2 opacity-90">Feito com ❤️ para quem faz o Brasil acontecer.</p>
+      <footer className="py-8 border-t">
+        <div className="container max-w-6xl mx-auto px-6 text-center">
+          <p className="text-sm text-gray-600">© 2025 FinMEI — Feito para quem empreende com as próprias mãos.</p>
+          <p className="text-sm text-gray-500 mt-2">Contato: contato@finmei.com</p>
+        </div>
       </footer>
     </main>
   );
