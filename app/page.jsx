@@ -1,11 +1,60 @@
+"use client";
+
 import { useState } from "react";
-<button type="submit" className="bg-emerald-600 text-white px-6 py-2 rounded-xl hover:bg-emerald-700 transition">
-Quero testar o FinMEI
-</button>
-</form>
-) : (
-<p className="text-emerald-700 font-medium text-lg mt-4">✅ Obrigado! Você está na lista de espera 🎉</p>
-)}
+
+export default function Home() {
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSubmitted(true);
+  };
+
+  return (
+    <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-indigo-50 to-white px-6 py-16">
+      <div className="max-w-2xl w-full text-center">
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          FinMEI — Gestão Financeira Simplificada para MEIs
+        </h1>
+        <p className="text-lg text-gray-600 mb-8">
+          Controle suas finanças com praticidade. Organize entradas, saídas e lucros sem precisar de planilhas.
+        </p>
+
+        {!submitted ? (
+          <form
+            onSubmit={handleSubmit}
+            className="bg-white shadow-lg rounded-2xl p-6 border border-gray-100"
+          >
+            <label className="block text-gray-700 text-left mb-2" htmlFor="email">
+              Cadastre-se para receber novidades:
+            </label>
+            <input
+              id="email"
+              type="email"
+              placeholder="Seu melhor e-mail"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            <button
+              type="submit"
+              className="w-full bg-indigo-600 text-white font-semibold py-3 rounded-lg hover:bg-indigo-700 transition"
+            >
+              Quero me cadastrar
+            </button>
+          </form>
+        ) : (
+          <div className="bg-green-50 border border-green-200 text-green-800 p-6 rounded-2xl shadow-sm">
+            🎉 Obrigado por se cadastrar!  
+            <br />Em breve você receberá novidades sobre o FinMEI.
+          </div>
+        )}
+      </div>
+    </main>
+  );
+}
 </section>
 
 
