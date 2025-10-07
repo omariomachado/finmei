@@ -25,43 +25,46 @@ export default function Page() {
         </a>
       </header>
 
-      {/* HERO */}
-      <section className="text-center py-20 px-6 max-w-3xl mx-auto">
-        <h2 className="text-5xl font-extrabold text-gray-900 mb-6">
-          O painel financeiro que todo MEI precisava.
-        </h2>
-        <p className="text-lg text-gray-600 mb-10">
-          Simplifique sua gestão financeira, visualize lucros e nunca mais esqueça o DAS — 
-          tudo em um só lugar, feito para quem vive o dia a dia do MEI.
-        </p>
+     {/* HERO */}
+<section className="bg-gradient-hero text-center py-24 px-6">
+  <div className="max-w-3xl mx-auto">
+    <h2 className="text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
+      Controle total das finanças do seu MEI<br />
+      <span className="text-emerald-600">em poucos minutos ⏱️</span>
+    </h2>
+    <p className="text-lg text-gray-600 mb-10">
+      Veja lucros, despesas e o valor do DAS em segundos — tudo automático, visual e feito
+      para quem quer entender o próprio dinheiro sem ser especialista.
+    </p>
 
-        {!submitted ? (
-          <form
-            onSubmit={handleSubmit}
-            id="cadastro"
-            className="flex flex-col sm:flex-row justify-center gap-3 max-w-md mx-auto"
-          >
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Seu melhor e-mail"
-              className="flex-1 border border-gray-300 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400"
-            />
-            <button
-              type="submit"
-              className="bg-emerald-600 text-white px-6 py-3 rounded-xl hover:bg-emerald-700 transition font-semibold"
-            >
-              Quero participar 🚀
-            </button>
-          </form>
-        ) : (
-          <p className="text-emerald-700 font-medium text-lg mt-4">
-            ✅ Obrigado! Você está na lista de espera 🎉
-          </p>
-        )}
-      </section>
+    {!submitted ? (
+      <form
+        onSubmit={handleSubmit}
+        id="cadastro"
+        className="flex flex-col sm:flex-row justify-center gap-3 max-w-md mx-auto"
+      >
+        <input
+          type="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Digite seu e-mail e entre na lista"
+          className="flex-1 border border-gray-300 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400"
+        />
+        <button
+          type="submit"
+          className="btn-primary"
+        >
+          Quero testar grátis 🚀
+        </button>
+      </form>
+    ) : (
+      <p className="text-emerald-700 font-medium text-lg mt-4">
+        ✅ Obrigado! Você está na lista de espera 🎉
+      </p>
+    )}
+  </div>
+</section>
 
       {/* PROVA SOCIAL */}
       <section className="bg-white py-12 border-y border-gray-100">
