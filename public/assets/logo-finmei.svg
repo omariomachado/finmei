@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="48" viewBox="0 0 180 48" fill="none">
+  <rect width="180" height="48" rx="10" fill="#F2FFF9"/>
+  <text x="20" y="32" font-family="Poppins, sans-serif" font-weight="700" font-size="26" fill="#007A5C">Fin</text>
+  <text x="75" y="32" font-family="Poppins, sans-serif" font-weight="700" font-size="26" fill="#00C389">MEI</text>
+  <circle cx="150" cy="24" r="5" fill="#FF4E6E"/>
+  <path d="M150 17 L154 24 L150 31 L146 24 Z" fill="#FF4E6E" opacity="0.8"/>
+</svg>
