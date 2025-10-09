@@ -2,6 +2,11 @@
 
 import { useState } from "react";
 import { createClient } from "@supabase/supabase-js";
+if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+  console.error("❌ Variáveis do Supabase ausentes! Verifique na Vercel Settings > Environment Variables.");
+} else {
+  console.log("✅ Variáveis do Supabase carregadas com sucesso.");
+}
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
