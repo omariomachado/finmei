@@ -21,7 +21,7 @@ export default function Home() {
     }
 
     try {
-      const { error } = await supabase.from("leads").insert([{ email }]);
+      const { error } = await supabase.from("email").insert([{ email }]);
 
       if (error) {
         console.error("Erro ao salvar lead:", error.message);
