@@ -112,5 +112,4 @@ export default function Home() {
       </footer>
     </main>
   );
-}
-feat: upgrade to FinMEI Premium Landing (V3)
+} 
