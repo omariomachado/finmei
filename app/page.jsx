@@ -1,94 +1,89 @@
 "use client";
-
 import { useState } from "react";
-import { createClient } from "@supabase/supabase-js";
-if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-  console.error("❌ Variáveis do Supabase ausentes! Verifique na Vercel Settings > Environment Variables.");
-} else {
-  console.log("✅ Variáveis do Supabase carregadas com sucesso.");
-}
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+import { FaInstagram, FaEnvelope } from "react-icons/fa";
 
 export default function Home() {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState("idle");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus("");
+    setStatus("loading");
 
-    const { error } = await supabase.from("email").insert([{ email }]);
+    if (!email || !email.includes("@")) {
+      setStatus("error");
+      return;
+    }
 
-    if (error) {
-      setStatus("⚠️ Ocorreu um erro. Verifique o e-mail e tente novamente.");
-    } else {
-      setStatus("✅ Sucesso! Você foi adicionado à lista de espera.");
-      setEmail("");
+    try {
+      const response = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      if (response.ok) {
+        setStatus("success");
+        setEmail("");
+      } else {
+        setStatus("error");
+      }
+    } catch (err) {
+      console.error("Erro:", err);
+      setStatus("error");
     }
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-green-200 via-sky-200 to-purple-200 text-gray-900 font-inter relative overflow-hidden">
-      {/* Efeito de brilho animado no fundo */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.6),transparent_40%),radial-gradient(circle_at_80%_80%,rgba(255,255,255,0.4),transparent_40%)] animate-pulse opacity-70"></div>
-
-      <section className="relative z-10 px-6 text-center max-w-3xl">
-        <h1 className="text-4xl sm:text-6xl font-extrabold leading-tight tracking-tight text-gray-900 animate-fade-up">
-          O painel financeiro que todo{" "}
-          <span className="bg-gradient-to-r from-green-500 to-emerald-700 bg-clip-text text-transparent">
-            MEI
-          </span>{" "}
-          precisava.
+    <main className="min-h-screen flex flex-col items-center justify-between bg-gradient-to-b from-gray-900 via-gray-950 to-black text-white px-6">
+      {/* HERO */}
+      <section className="flex flex-col items-center justify-center text-center mt-20">
+        <h1 className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-emerald-400 to-green-600 bg-clip-text text-transparent">
+          Controle total das suas finanças MEI.
         </h1>
-
-        <p className="mt-6 text-lg sm:text-xl text-gray-700 leading-relaxed">
-          Simplifique sua gestão financeira, visualize lucros e nunca mais
-          esqueça o DAS — tudo em um só lugar, feito para quem vive o dia a dia
-          do MEI.
+        <p className="mt-6 text-lg md:text-xl text-gray-300 max-w-2xl leading-relaxed">
+          Com o <strong>FinMEI</strong>, você simplifica sua gestão financeira, 
+          acompanha lucros e nunca mais esquece o DAS. Tudo em um só painel.
         </p>
 
         <form
           onSubmit={handleSubmit}
-          className="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4"
+          className="mt-10 flex flex-col sm:flex-row gap-3 w-full max-w-md"
         >
           <input
             type="email"
             placeholder="Seu melhor e-mail"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full sm:w-80 px-5 py-3 rounded-xl border border-gray-300 focus:ring-4 focus:ring-green-300 focus:border-green-500 outline-none transition duration-300 shadow-md"
+            className="flex-1 px-4 py-3 rounded-xl border border-gray-700 bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
           />
           <button
             type="submit"
-            className="w-full sm:w-auto bg-gradient-to-r from-green-500 to-emerald-600 text-white px-7 py-3 rounded-xl font-semibold text-lg shadow-lg hover:shadow-green-400/40 transition-all duration-300 flex items-center justify-center gap-2 hover:scale-[1.03]"
+            disabled={status === "loading"}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-xl transition transform hover:scale-[1.03] hover:shadow-lg"
           >
-            Quero participar{" "}
-            <span className="animate-bounce">🚀</span>
+            {status === "loading" ? "Enviando..." : "Quero participar 🚀"}
           </button>
         </form>
 
-        {status && (
-          <p
-            className={`mt-6 text-base font-medium ${
-              status.startsWith("✅") ? "text-green-700" : "text-red-600"
-            }`}
-          >
-            {status}
+        {status === "success" && (
+          <p className="text-emerald-400 mt-4 font-medium">
+            ✅ Sucesso! Você foi adicionado à lista de espera.
           </p>
         )}
-
-        <p className="mt-10 text-sm text-gray-600">
-          Mais de{" "}
-          <span className="font-semibold text-emerald-700">
-            120 microempreendedores
-          </span>{" "}
-          já estão na lista de espera.
-        </p>
+        {status === "error" && (
+          <p className="text-red-500 mt-4 font-medium">
+            ⚠️ Ocorreu um erro. Verifique o e-mail e tente novamente.
+          </p>
+        )}
       </section>
-    </main>
-  );
-}
+
+      {/* SOCIAL PROOF */}
+      <section className="mt-20 text-center">
+        <p className="text-gray-400 text-sm tracking-wide uppercase mb-3">
+          Confiança que cresce todo dia
+        </p>
+        <p className="text-gray-200 text-lg">
+          💼 Mais de <span className="text-emerald-400 font-semibold">120 microempreendedores</span> 
+          já estão na lista de espera do FinMEI.
+        </p>
