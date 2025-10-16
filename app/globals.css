@@ -2,66 +2,61 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Import de fontes */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap');
+/* Fontes */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap');
 
-:root {
-  --emerald-400: #34d399;
-  --emerald-500: #10b981;
-  --emerald-600: #059669;
-  --emerald-700: #047857;
-  --gray-900: #111827;
-  --gray-950: #0a0f1c;
+:root{
+  --finmei-primary: #00C389;
+  --finmei-dark: #007A5C;
+  --bg-900: #06121a;
+  --muted: #94a3b8;
 }
 
-/* Estilos base */
+/* Base */
 html, body {
   height: 100%;
   scroll-behavior: smooth;
-  background-color: var(--gray-950);
-  color: #f9fafb;
+  background: linear-gradient(180deg, #021018 0%, #06121a 40%, #000000 100%);
+  color: #f8fafc;
   font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Títulos */
+/* Headings */
 h1, h2, h3 {
   font-family: 'Poppins', 'Inter', sans-serif;
-  letter-spacing: -0.03em;
+  line-height: 1.05;
 }
 
-/* Botões */
+/* Cards / inputs */
+input, textarea {
+  background: rgba(6, 18, 26, 0.6);
+  border: 1px solid rgba(16, 185, 129, 0.08);
+  color: #e6eef0;
+}
+
+/* Focus visuals */
+input:focus, textarea:focus, button:focus {
+  outline: none;
+  box-shadow: 0 8px 30px rgba(0, 195, 137, 0.08);
+}
+
+/* Buttons */
 button {
-  cursor: pointer;
-  transition: all 0.2s ease;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+button:hover { transform: translateY(-2px); }
+
+/* Shadows */
+.shadow-soft {
+  box-shadow: 0 12px 40px rgba(2,6,23,0.6);
 }
 
-/* Animação de brilho suave no botão principal */
-button:hover {
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
-}
+/* Footer */
+footer { background: linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.5)); }
 
-/* Inputs */
-input {
-  transition: all 0.3s ease;
-}
-
-input:focus {
-  box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
-}
-
-/* Rodapé */
-footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding-top: 1.5rem;
-}
-
-/* Responsividade */
+/* Responsive tweaks */
 @media (max-width: 640px) {
-  h1 {
-    font-size: 1.9rem;
-  }
-  p {
-    font-size: 1rem;
-  }
+  h1 { font-size: 1.8rem; }
+  .max-w-3xl { padding-left: 1rem; padding-right: 1rem; }
 }
