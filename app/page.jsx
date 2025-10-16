@@ -1,115 +1,186 @@
 "use client";
 
 import { useState } from "react";
-import { createClient } from "@supabase/supabase-js";
-import { Briefcase, Instagram, Mail, Sparkles } from "lucide-react";
-
-// ✅ Conexão segura com Supabase via variáveis de ambiente
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { Instagram, Mail as MailIcon } from "lucide-react";
 
 export default function Home() {
-  const [email, setEmail] = useState("");
+  const [form, setForm] = useState({
+    first_name: "",
+    last_name: "",
+    phone: "",
+    email: "",
+  });
+  const [status, setStatus] = useState("idle"); // idle | loading | success | error
   const [message, setMessage] = useState("");
+
+  const update = (k, v) => setForm((s) => ({ ...s, [k]: v }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setStatus("loading");
+    setMessage("");
 
-    if (!email || !email.includes("@")) {
-      setMessage("⚠️ Digite um e-mail válido.");
+    // validações básicas
+    if (!form.email || !form.email.includes("@")) {
+      setMessage("Por favor digite um e-mail válido.");
+      setStatus("error");
+      return;
+    }
+    if (!form.first_name || !form.last_name) {
+      setMessage("Por favor informe seu nome e sobrenome.");
+      setStatus("error");
+      return;
+    }
+    if (!form.phone || form.phone.length < 8) {
+      setMessage("Por favor informe um telefone válido.");
+      setStatus("error");
       return;
     }
 
-    const { error } = await supabase.from("email").insert([{ email }]);
+    try {
+      const res = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
-    if (error) {
-      console.error(error);
-      setMessage("⚠️ Ocorreu um erro. Verifique o e-mail e tente novamente.");
-    } else {
-      setMessage("✅ E-mail cadastrado com sucesso! Você será avisado no lançamento 🚀");
-      setEmail("");
+      const data = await res.json();
+
+      if (res.ok) {
+        setStatus("success");
+        setMessage(data?.message ?? "✅ Cadastro realizado com sucesso!");
+        setForm({ first_name: "", last_name: "", phone: "", email: "" });
+      } else {
+        setStatus("error");
+        setMessage(data?.error ?? "Ocorreu um erro. Tente novamente mais tarde.");
+      }
+    } catch (err) {
+      console.error(err);
+      setStatus("error");
+      setMessage("Erro na conexão. Tente novamente.");
     }
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-emerald-950 via-emerald-900 to-black text-white flex flex-col items-center justify-between">
-      {/* HERO SECTION */}
-      <section className="flex flex-col items-center justify-center text-center px-6 py-16 mt-12 max-w-3xl">
-        <div className="relative">
-          <Sparkles className="absolute -top-6 -right-6 text-emerald-400 w-6 h-6 animate-pulse" />
-          <h1 className="text-5xl font-extrabold leading-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-green-300 drop-shadow-lg">
-            Simplifique sua vida financeira com o <span className="text-white">FinMEI</span>
-          </h1>
+    <main className="min-h-screen bg-gradient-to-b from-emerald-950 via-emerald-900 to-black text-white flex flex-col items-center">
+      {/* HEADER HERO */}
+      <header className="w-full max-w-5xl px-6 pt-12">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="bg-emerald-700 rounded-md px-3 py-1 font-semibold">FinMEI</div>
+            <span className="text-sm text-gray-300">Simples. Claro. Pra você.</span>
+          </div>
+          <nav>
+            <a href="#cadastro" className="bg-emerald-600 hover:bg-emerald-500 text-black px-4 py-2 rounded-lg font-semibold">
+              Entrar na lista
+            </a>
+          </nav>
         </div>
-        <p className="text-lg text-gray-300 mb-6">
-          Controle, organização e crescimento para quem faz o Brasil acontecer — os microempreendedores.
+      </header>
+
+      <section className="w-full max-w-3xl px-6 text-center mt-12">
+        <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-green-300">
+          Controle total das suas finanças MEI — sem complicação.
+        </h1>
+        <p className="mt-4 text-gray-300 max-w-2xl mx-auto">
+          Organize receitas, despesas e pagamentos (como o DAS) com um painel simples — feito para quem
+          trabalha com as mãos, o dia a dia e precisa de clareza financeira agora.
         </p>
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col sm:flex-row gap-3 w-full max-w-md mt-4"
-        >
-          <input
-            type="email"
-            value={email}
-            placeholder="Digite seu e-mail"
-            onChange={(e) => setEmail(e.target.value)}
-            className="flex-1 px-4 py-3 rounded-xl bg-emerald-950 border border-emerald-600 text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all"
-          />
-          <button
-            type="submit"
-            className="bg-emerald-500 hover:bg-emerald-400 text-black font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-emerald-500/40 transition-all"
-          >
-            Quero ser avisado
-          </button>
+
+        {/* FORM */}
+        <form id="cadastro" onSubmit={handleSubmit} className="mt-8 bg-emerald-950/40 p-6 rounded-2xl shadow-lg border border-emerald-800 max-w-2xl mx-auto">
+          <div className="grid sm:grid-cols-2 gap-4">
+            <input
+              value={form.first_name}
+              onChange={(e) => update("first_name", e.target.value)}
+              placeholder="Nome"
+              className="px-4 py-3 rounded-lg border border-emerald-800 bg-emerald-950 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            />
+            <input
+              value={form.last_name}
+              onChange={(e) => update("last_name", e.target.value)}
+              placeholder="Sobrenome"
+              className="px-4 py-3 rounded-lg border border-emerald-800 bg-emerald-950 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            />
+            <input
+              value={form.phone}
+              onChange={(e) => update("phone", e.target.value)}
+              placeholder="Telefone (ex: 11998765432)"
+              inputMode="tel"
+              className="px-4 py-3 rounded-lg border border-emerald-800 bg-emerald-950 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            />
+            <input
+              value={form.email}
+              onChange={(e) => update("email", e.target.value)}
+              placeholder="E-mail"
+              type="email"
+              className="px-4 py-3 rounded-lg border border-emerald-800 bg-emerald-950 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            />
+          </div>
+
+          <div className="mt-6 flex items-center justify-between gap-4">
+            <button
+              type="submit"
+              disabled={status === "loading"}
+              className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-black font-semibold px-6 py-3 rounded-xl shadow-lg hover:scale-[1.02] transition"
+            >
+              {status === "loading" ? "Enviando..." : "Quero testar — me avise"}
+            </button>
+
+            <div className="text-sm text-gray-300">
+              <strong className="text-emerald-300">Beta gratuito</strong> — primeiras 100 vagas.
+            </div>
+          </div>
+
+          {message && (
+            <p className={`mt-4 text-sm ${status === "success" ? "text-emerald-300" : "text-red-400"}`}>
+              {message}
+            </p>
+          )}
         </form>
-        {message && (
-          <p className="mt-3 text-sm text-gray-300">{message}</p>
-        )}
       </section>
 
-      {/* BENEFÍCIOS */}
-      <section className="text-center px-6 py-16 bg-gradient-to-t from-black/30 to-transparent w-full">
-        <h2 className="text-3xl font-bold mb-8 text-emerald-300">
-          {"💡"} Por que escolher o FinMEI?
-        </h2>
-        <div className="grid sm:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          <div className="p-6 rounded-2xl bg-emerald-950/50 border border-emerald-800 hover:border-emerald-400 transition-all">
-            <h3 className="text-xl font-semibold text-emerald-200 mb-2">Gestão Simplificada</h3>
-            <p className="text-gray-400">Organize receitas, despesas e fluxo de caixa em poucos cliques.</p>
+      {/* BENEFÍCIOS / SOCIAL PROOF */}
+      <section className="w-full max-w-5xl px-6 py-12">
+        <div className="grid md:grid-cols-3 gap-6">
+          <div className="p-6 rounded-2xl bg-emerald-950/30 border border-emerald-800">
+            <h4 className="font-semibold text-emerald-200">Registre em segundos</h4>
+            <p className="text-gray-400 text-sm mt-2">Use o celular para anotar entradas e saídas rapidamente.</p>
           </div>
-          <div className="p-6 rounded-2xl bg-emerald-950/50 border border-emerald-800 hover:border-emerald-400 transition-all">
-            <h3 className="text-xl font-semibold text-emerald-200 mb-2">Insights Financeiros</h3>
-            <p className="text-gray-400">Descubra oportunidades de crescimento com relatórios automáticos.</p>
+          <div className="p-6 rounded-2xl bg-emerald-950/30 border border-emerald-800">
+            <h4 className="font-semibold text-emerald-200">Lembretes automáticos</h4>
+            <p className="text-gray-400 text-sm mt-2">Nunca mais perca o vencimento do DAS.</p>
           </div>
-          <div className="p-6 rounded-2xl bg-emerald-950/50 border border-emerald-800 hover:border-emerald-400 transition-all">
-            <h3 className="text-xl font-semibold text-emerald-200 mb-2">Apoio Real</h3>
-            <p className="text-gray-400">O FinMEI foi criado por quem entende as dores do microempreendedor.</p>
+          <div className="p-6 rounded-2xl bg-emerald-950/30 border border-emerald-800">
+            <h4 className="font-semibold text-emerald-200">Relatórios prontos</h4>
+            <p className="text-gray-400 text-sm mt-2">Relatórios simples para você ou seu contador.</p>
           </div>
         </div>
 
-        <p className="mt-10 text-gray-400">
-          <Briefcase className="inline w-5 h-5 text-emerald-400 mr-1" />
-          Mais de <span className="text-emerald-400 font-semibold">120 microempreendedores</span> já estão na lista de espera do FinMEI.
+        <p className="mt-8 text-center text-gray-400">
+          <span className="inline-block align-middle mr-2">💼</span>
+          Mais de <span className="text-emerald-400 font-semibold">120 microempreendedores</span> já estão na lista.
         </p>
       </section>
 
-      {/* RODAPÉ */}
-      <footer className="w-full bg-black/40 py-6 border-t border-emerald-900 mt-10 text-center text-gray-400 text-sm">
-        <div className="flex flex-col items-center gap-3">
-          <div className="flex gap-5 justify-center">
-            <a href="https://www.instagram.com/finmeiapp" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 transition-all">
-              <Instagram className="inline w-5 h-5 mr-1" /> @finmeiapp
+      {/* FOOTER */}
+      <footer className="w-full border-t border-emerald-900 bg-black/40 py-8 mt-8 text-center text-gray-400">
+        <div className="max-w-5xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="text-left">
+            <p className="font-semibold text-emerald-300">© FinMEI 2025</p>
+            <p className="text-sm text-gray-400">Melhorando a vida de quem faz o Brasil acontecer!</p>
+          </div>
+
+          <div className="flex items-center gap-6">
+            <a href="https://www.instagram.com/finmeiapp" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-emerald-300 transition">
+              <Instagram size={18} /> <span className="text-sm">@finmeiapp</span>
             </a>
-            <a href="mailto:finmei.contato@gmail.com" className="hover:text-emerald-400 transition-all">
-              <Mail className="inline w-5 h-5 mr-1" /> finmei.contato@gmail.com
+            <a href="mailto:finmei.contato@gmail.com" className="flex items-center gap-2 hover:text-emerald-300 transition">
+              <MailIcon size={18} /> <span className="text-sm">finmei.contato@gmail.com</span>
             </a>
           </div>
-          <p className="text-gray-500">
-            © FinMEI 2025 - Melhorando a vida de quem faz o Brasil acontecer!
-          </p>
         </div>
       </footer>
     </main>
   );
-} 
+}
